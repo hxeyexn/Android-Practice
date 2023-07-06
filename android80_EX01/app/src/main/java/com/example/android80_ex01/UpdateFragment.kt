@@ -6,28 +6,33 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.android80_ex01.databinding.FragmentAddBinding
+import com.example.android80_ex01.databinding.FragmentUpdateBinding
 
-class AddFragment : Fragment() {
+class UpdateFragment : Fragment() {
 
-    lateinit var fragmentAddBinding: FragmentAddBinding
+    lateinit var fragmentUpdateBinding: FragmentUpdateBinding
     lateinit var mainActivity: MainActivity
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        fragmentAddBinding = FragmentAddBinding.inflate(inflater)
+        fragmentUpdateBinding = FragmentUpdateBinding.inflate(inflater)
         mainActivity = activity as MainActivity
 
-        fragmentAddBinding.run {
-            toolbarAdd.run {
-                title = "정보입력"
+        fragmentUpdateBinding.run {
+
+            val student = DAO.selectData(mainActivity, MainActivity.studentIdx)
+            editTextUpdateName.setText(student.name)
+            editTextUpdateAge.setText(student.age.toString())
+            editTextUpdateKorean.setText(student.korean.toString())
+
+            toolbarUpdate.run {
+                title = "정보 수정"
                 setTitleTextColor(Color.WHITE)
 
                 setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
@@ -39,27 +44,24 @@ class AddFragment : Fragment() {
                 }
 
                 setNavigationOnClickListener {
-                    mainActivity.removeFragment(MainActivity.ADD_FRAGMENT)
+                    mainActivity.removeFragment(MainActivity.UPDATE_FRAGMENT)
                 }
             }
 
-            editTextAddKorean.setOnEditorActionListener { v, actionId, event ->
-                val idx = 0
-                val name = editTextAddName.text.toString()
-                val age = editTextAddAge.text.toString().toInt()
-                val korean = editTextAddKorean.text.toString().toInt()
+            editTextUpdateKorean.setOnEditorActionListener { v, actionId, event ->
+                student.name = editTextUpdateName.text.toString()
+                student.age = editTextUpdateAge.text.toString().toInt()
+                student.korean = editTextUpdateKorean.text.toString().toInt()
 
-                val studentClass = StudentClass(idx, name, age, korean)
+                DAO.updateData(mainActivity, student)
 
-                DAO.insertData(mainActivity, studentClass)
-
-                mainActivity.removeFragment(MainActivity.ADD_FRAGMENT)
+                mainActivity.removeFragment(MainActivity.UPDATE_FRAGMENT)
 
                 false
             }
         }
 
-        return fragmentAddBinding.root
+        return fragmentUpdateBinding.root
     }
 
 }

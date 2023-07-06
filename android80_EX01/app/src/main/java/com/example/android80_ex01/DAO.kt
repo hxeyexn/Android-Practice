@@ -28,16 +28,18 @@ class DAO {
             cursor.moveToNext()
 
             // 컬럼의 이름을 지정하여 컬럼의 순서값을 가져온다.
-            val idx1 = cursor.getColumnIndex("name")
-            val idx2 = cursor.getColumnIndex("age")
-            val idx3 = cursor.getColumnIndex("korean")
+            val idx1 = cursor.getColumnIndex("idx")
+            val idx2 = cursor.getColumnIndex("name")
+            val idx3 = cursor.getColumnIndex("age")
+            val idx4 = cursor.getColumnIndex("korean")
 
             // 데이터를 가져온다.
-            val name = cursor.getString(idx1)
-            val age = cursor.getInt(idx2)
-            val korean = cursor.getInt(idx3)
+            val idx = cursor.getInt(idx1)
+            val name = cursor.getString(idx2)
+            val age = cursor.getInt(idx3)
+            val korean = cursor.getInt(idx4)
 
-            val studentClass = StudentClass(name, age, korean)
+            val studentClass = StudentClass(idx, name, age, korean)
 
             dbHelper.close()
 
@@ -53,16 +55,18 @@ class DAO {
 
             while (cursor.moveToNext()) {
                 // 컬럼의 이름을 지정하여 컬럼의 순서값을 가져온다.
-                val idx1 = cursor.getColumnIndex("name")
-                val idx2 = cursor.getColumnIndex("age")
-                val idx3 = cursor.getColumnIndex("korean")
+                val idx1 = cursor.getColumnIndex("idx")
+                val idx2 = cursor.getColumnIndex("name")
+                val idx3 = cursor.getColumnIndex("age")
+                val idx4 = cursor.getColumnIndex("korean")
 
                 // 데이터를 가져온다.
-                val name = cursor.getString(idx1)
-                val age = cursor.getInt(idx2)
-                val korean = cursor.getInt(idx3)
+                val idx = cursor.getInt(idx1)
+                val name = cursor.getString(idx2)
+                val age = cursor.getInt(idx3)
+                val korean = cursor.getInt(idx4)
 
-                val studentClass = StudentClass(name, age, korean)
+                val studentClass = StudentClass(idx, name, age, korean)
                 studentList.add(studentClass)
             }
 
@@ -71,8 +75,25 @@ class DAO {
             return studentList
         }
 
-        fun updateData() {}
-        fun deleteData() {}
+        fun updateData(context: Context, obj: StudentClass) {
+            val sql = """update StudentTable
+                | set name = ?, age = ?, korean = ?
+                | where idx = ?
+            """.trimMargin()
+
+            val args = arrayOf(obj.name, obj.age, obj.korean, obj.idx)
+            val dbHelper = DBHelper(context)
+            dbHelper.writableDatabase.execSQL(sql, args)
+            dbHelper.close()
+        }
+
+        fun deleteData(context: Context, idx: Int) {
+            val sql = "delete from StudentTable where idx = ?"
+            val args = arrayOf(idx)
+            val dbHelper = DBHelper(context)
+            dbHelper.writableDatabase.execSQL(sql, args)
+            dbHelper.close()
+        }
 
     }
 }

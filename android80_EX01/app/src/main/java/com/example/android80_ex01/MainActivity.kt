@@ -11,12 +11,13 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var activityMainBinding: ActivityMainBinding
 
-    var position = 0
-
     companion object {
         val MAIN_FRAGMENT = "MainFragment"
         val ADD_FRAGMENT = "AddFragment"
         val SHOW_FRAGMENT = "ShowFragment"
+        val UPDATE_FRAGMENT = "UpdateFragment"
+
+        var studentIdx = 0
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +44,10 @@ class MainActivity : AppCompatActivity() {
             SHOW_FRAGMENT -> {
                 ShowFragment()
             }
+            UPDATE_FRAGMENT -> {
+                UpdateFragment()
+            }
+
             else -> {
                 Fragment()
             }
@@ -74,4 +79,4 @@ class MainActivity : AppCompatActivity() {
 
 }
 
-data class StudentClass(var name: String, var age: Int, var korean: Int)
+data class StudentClass(var idx: Int, var name: String, var age: Int, var korean: Int)

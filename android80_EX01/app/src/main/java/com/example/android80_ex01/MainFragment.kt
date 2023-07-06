@@ -35,7 +35,7 @@ class MainFragment : Fragment() {
                 inflateMenu(R.menu.main_menu)
 
                 setOnMenuItemClickListener {
-                    mainActivity.replaceFragment(MainActivity.ADD_FRAGMENT, true, true)
+                    mainActivity.replaceFragment(MainActivity.ADD_FRAGMENT, true, false)
 
                     false
                 }
@@ -59,8 +59,8 @@ class MainFragment : Fragment() {
                 textViewRowMainName = rowMainBinding.textViewRowMainName
 
                 rowMainBinding.root.setOnClickListener {
-                    mainActivity.position = adapterPosition
-                    mainActivity.replaceFragment(MainActivity.SHOW_FRAGMENT, true, true)
+                    MainActivity.studentIdx = studentList[adapterPosition].idx
+                    mainActivity.replaceFragment(MainActivity.SHOW_FRAGMENT, true, false)
                 }
             }
         }

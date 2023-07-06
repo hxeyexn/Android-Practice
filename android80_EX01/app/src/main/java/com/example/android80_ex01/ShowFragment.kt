@@ -30,6 +30,20 @@ class ShowFragment : Fragment() {
             toolbarShow.run {
                 title = "상세정보"
                 setTitleTextColor(Color.WHITE)
+                inflateMenu(R.menu.show_menu)
+
+                setOnMenuItemClickListener {
+                    when(it?.itemId) {
+                        R.id.showMenuUpdate -> {
+                            mainActivity.replaceFragment(MainActivity.UPDATE_FRAGMENT, true, false)
+                        }
+                        R.id.showMenuDelete -> {
+                            DAO.deleteData(mainActivity, MainActivity.studentIdx)
+                            mainActivity.removeFragment(MainActivity.SHOW_FRAGMENT)
+                        }
+                    }
+                    false
+                }
 
                 setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
 
@@ -44,7 +58,7 @@ class ShowFragment : Fragment() {
                 }
             }
 
-            val student = DAO.selectData(mainActivity, mainActivity.position + 1)
+            val student = DAO.selectData(mainActivity, MainActivity.studentIdx)
             textViewShowName.text = "이름 : ${student.name}"
             textViewShowAge.text = "나이 : ${student.age}"
             textViewShowKorean.text = "국어점수 : ${student.korean}"
