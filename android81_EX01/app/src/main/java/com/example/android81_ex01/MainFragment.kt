@@ -40,11 +40,7 @@ class MainFragment : Fragment() {
 
             recyclerViewMain.run {
                 adapter = MainRecyclerViewAdapter()
-                layoutManager = LinearLayoutManager(mainActivity).apply {
-                    // 리사이클러뷰 아이템의 순서를 역순으로 배치
-                    reverseLayout = true
-                    stackFromEnd = true
-                }
+                layoutManager = LinearLayoutManager(mainActivity)
                 addItemDecoration(DividerItemDecoration(mainActivity, DividerItemDecoration.VERTICAL))
             }
         }

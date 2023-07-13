@@ -47,7 +47,7 @@ class DAO {
         }
 
         fun selectAllData(context: Context): MutableList<MemoClass> {
-            val sql = "select * from MemoTable"
+            val sql = "select * from MemoTable order by idx DESC"
             val dbHelper = DBHelper(context)
             val cursor = dbHelper.writableDatabase.rawQuery(sql, null)
 
