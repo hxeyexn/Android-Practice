@@ -3,8 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/updateMemoMenuSave"
-        android:icon="@drawable/done_24px"
-        android:title="수정 완료"
+        android:id="@+id/mainMenuItem"
+        android:icon="@drawable/my_location_24px"
+        android:title="Item"
         app:showAsAction="always" />
 </menu>

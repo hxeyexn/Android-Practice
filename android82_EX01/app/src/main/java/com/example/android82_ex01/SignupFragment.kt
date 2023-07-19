@@ -1,6 +1,5 @@
 package com.example.android82_ex01
 
-import android.app.AlertDialog
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.graphics.Color
 import android.os.Bundle
@@ -27,7 +26,7 @@ class SignupFragment : Fragment() {
 
         fragmentSignupBinding.run {
 
-            editTextSignupPw.requestFocus()
+            signupPw.requestFocus()
 
             thread {
                 SystemClock.sleep(500)
@@ -35,38 +34,39 @@ class SignupFragment : Fragment() {
                 imm.showSoftInput(mainActivity.currentFocus, 0)
             }
 
+            // toolbar -> materialToolbar
             toolbarSignup.run {
                 title = "비밀번호 설정"
-                setTitleTextColor(Color.WHITE)
+                isTitleCentered = true
+                setTitleTextColor(Color.BLACK)
             }
 
             buttonSignupSet.setOnClickListener {
-                val pw = editTextSignupPw.text.toString()
-                val pwCheck = editTextSignupCheckPw.text.toString()
+                // editText -> textInputLayout
+                val pw = signupPw.editText?.text.toString()
+                val pwCheck = signupCheckPw.editText?.text.toString()
 
-                val builder = AlertDialog.Builder(mainActivity)
-
-                if (pw != pwCheck || pwCheck.isEmpty()) {
-                    builder.run {
-                        setTitle("비밀번호 설정 오류")
-                        setMessage("비밀번호가 일치하지 않습니다")
-                        setPositiveButton("확인", null)
-                        show()
+                if (pw.isEmpty()) {
+                    signupPw.run {
+                        error = "비밀번호를 입력하세요"
+                        setErrorIconDrawable(R.drawable.error_24px)
+                        signupPw.requestFocus()
                     }
-                } else if (pw.isEmpty()) {
-                    builder.run {
-                        setTitle("비밀번호 설정 오류")
-                        setMessage("비밀번호를 입력하세요")
-                        setPositiveButton("확인", null)
-                        show()
+                } else if (pw != pwCheck || pwCheck.isEmpty()) {
+                    signupCheckPw.run {
+                        error = "비밀번호가 일치하지 않습니다"
+                        setErrorIconDrawable(R.drawable.error_24px)
                     }
                 } else {
+                    signupPw.error = null
+                    signupCheckPw.error = null
+
                     val idx = 0
                     val passwordClass = PasswordClass(idx, pw.toInt())
 
                     DAO.insertPassword(mainActivity, passwordClass)
 
-                    mainActivity.replaceFragment(DataClass.LOGIN_FRAGMENT, true, false)
+                    mainActivity.replaceFragment(DataClass.LOGIN_FRAGMENT, false, true)
                 }
             }
         }
@@ -75,3 +75,4 @@ class SignupFragment : Fragment() {
     }
 
 }
+

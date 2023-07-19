@@ -36,13 +36,14 @@ class ShowMemoFragment : Fragment() {
 
             toolbarShowMemo.run {
                 title = "메모 보기"
-                setTitleTextColor(Color.WHITE)
+                isTitleCentered = true
+                setTitleTextColor(Color.BLACK)
                 inflateMenu(R.menu.show_memo_menu)
 
                 setOnMenuItemClickListener {
                     when (it.itemId) {
                         R.id.showMemoMenuUpdate -> {
-                            mainActivity.replaceFragment(DataClass.UPDATE_MEMO_FRAGMENT, true, false)
+                            mainActivity.replaceFragment(DataClass.UPDATE_MEMO_FRAGMENT, true, true)
                         }
                         R.id.showMemoMenuDelete -> {
                             val builder = AlertDialog.Builder(mainActivity)
@@ -63,12 +64,12 @@ class ShowMemoFragment : Fragment() {
                     false
                 }
 
-                setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
+                setNavigationIcon(R.drawable.arrow_back_ios_new_24px)
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    navigationIcon?.colorFilter = BlendModeColorFilter(Color.WHITE, BlendMode.SRC_ATOP)
+                    navigationIcon?.colorFilter = BlendModeColorFilter(Color.BLACK, BlendMode.SRC_ATOP)
                 } else {
-                    navigationIcon?.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP)
+                    navigationIcon?.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP)
                 }
 
                 setNavigationOnClickListener {

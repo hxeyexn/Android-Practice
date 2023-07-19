@@ -1,63 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".SignupFragment" >
 
-    <androidx.appcompat.widget.Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbarSignup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
+        android:background="@color/white"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="16dp">
 
-        <TextView
-            android:id="@+id/textView"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/signupPw"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="비밀번호"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-
-        <EditText
-            android:id="@+id/editTextSignupPw"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:ems="10"
             android:hint="비밀번호"
-            android:inputType="textPassword" />
+            app:endIconDrawable="@drawable/cancel_24px"
+            app:endIconMode="clear_text"
+            app:passwordToggleEnabled="false">
 
-        <TextView
-            android:id="@+id/textView2"
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/signupCheckPw"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:text="비밀번호 확인"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-
-        <EditText
-            android:id="@+id/editTextSignupCheckPw"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:ems="10"
+            android:layout_marginTop="16dp"
             android:hint="비밀번호 확인"
-            android:inputType="textPassword" />
+            app:endIconDrawable="@drawable/cancel_24px"
+            app:endIconMode="clear_text">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/buttonSignupSet"
+            style="@style/Widget.Material3.Button.ElevatedButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="24dp"
             android:text="설정완료" />
     </LinearLayout>
 </LinearLayout>

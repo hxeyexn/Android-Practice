@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import com.example.android82_ex01.databinding.FragmentUpdateMemoBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlin.concurrent.thread
 
 class UpdateMemoFragment : Fragment() {
@@ -31,25 +32,18 @@ class UpdateMemoFragment : Fragment() {
 
         fragmentUpdateMemoBinding.run {
 
-            editTextUpdateMemoTitle.requestFocus()
-
-            thread {
-                SystemClock.sleep(300)
-                val imm = mainActivity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.showSoftInput(editTextUpdateMemoTitle, 0)
-            }
-
             val memo = DAO.selectMemo(mainActivity, DataClass.memoIdx)
             editTextUpdateMemoTitle.setText(memo.title)
             editTextUpdateMemoContent.setText(memo.content)
 
             toolbarUpdateMemo.run {
                 title = "메모 수정"
-                setTitleTextColor(Color.WHITE)
+                isTitleCentered = true
+                setTitleTextColor(Color.BLACK)
                 inflateMenu(R.menu.update_memo_menu)
 
                 setOnMenuItemClickListener {
-                    val builder = AlertDialog.Builder(mainActivity)
+                    val builder = MaterialAlertDialogBuilder(mainActivity)
                     if (editTextUpdateMemoTitle.text.isEmpty()) {
                         builder.run {
                             setTitle("제목 수정 오류")
@@ -75,12 +69,12 @@ class UpdateMemoFragment : Fragment() {
                     false
                 }
 
-                setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
+                setNavigationIcon(R.drawable.arrow_back_ios_new_24px)
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    navigationIcon?.colorFilter = BlendModeColorFilter(Color.WHITE, BlendMode.SRC_ATOP)
+                    navigationIcon?.colorFilter = BlendModeColorFilter(Color.BLACK, BlendMode.SRC_ATOP)
                 } else {
-                    navigationIcon?.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP)
+                    navigationIcon?.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP)
                 }
 
                 setNavigationOnClickListener {

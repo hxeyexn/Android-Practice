@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.core.view.get
+import androidx.core.view.isEmpty
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -21,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android82_ex01.databinding.DialogCategoryBinding
 import com.example.android82_ex01.databinding.FragmentCategoryBinding
 import com.example.android82_ex01.databinding.RowCategoryBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlin.concurrent.thread
 
 class CategoryFragment : Fragment() {
@@ -39,52 +41,53 @@ class CategoryFragment : Fragment() {
 
             toolbarCategory.run {
                 title = "카테고리 목록"
-                setTitleTextColor(Color.WHITE)
+                isTitleCentered = true
+                setTitleTextColor(Color.BLACK)
                 inflateMenu(R.menu.category_menu)
 
                 setOnMenuItemClickListener {
+
                     val dialogCategoryBinding = DialogCategoryBinding.inflate(layoutInflater)
-                    val builder = AlertDialog.Builder(mainActivity)
+                    val builder = MaterialAlertDialogBuilder(mainActivity)
                     builder.setTitle("카테고리 추가")
 
                     builder.setView(dialogCategoryBinding.root)
 
                     dialogCategoryBinding.run {
 
-                        textInputLayoutCategoryName.run {
-                            editText?.run {
-                                requestFocus()
+                        builder.setPositiveButton("확인") { dialogInterface: DialogInterface, i: Int ->
 
-                                addTextChangedListener {
-                                    if (it!!.isEmpty()) {
+                            textInputLayoutCategoryName.run {
+                                val categoryName = textInputLayoutCategoryName.editText!!.text.toString()
+                                editText.run {
+                                    if (categoryName.isEmpty()) {
                                         error = "카테고리 이름을 입력해주세요"
+                                        return@setPositiveButton
                                     } else {
-                                        textInputLayoutCategoryName.error = null
+                                        error = null
+                                        val idx = 0
+
+                                        val categoryClass = CategoryClass(idx, categoryName)
+                                        DAO.insertCategory(mainActivity, categoryClass)
+
+                                        DataClass.categoryList = DAO.selectAllCategory(mainActivity)
+                                        fragmentCategoryBinding.recyclerViewCategory.adapter?.notifyDataSetChanged()
                                     }
                                 }
                             }
                         }
 
-                        thread {
-                            SystemClock.sleep(300)
-                            val imm = mainActivity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-                            imm.showSoftInput(textInputLayoutCategoryName.editText!!, 0)
-                        }
-
-                        builder.setPositiveButton("확인") { dialogInterface: DialogInterface, i: Int ->
-                            val idx = 0
-                            val categoryName = textInputLayoutCategoryName.editText!!.text.toString()
-
-                            val categoryClass = CategoryClass(idx, categoryName)
-                            DAO.insertCategory(mainActivity, categoryClass)
-
-                            DataClass.categoryList = DAO.selectAllCategory(mainActivity)
-                            fragmentCategoryBinding.recyclerViewCategory.adapter?.notifyDataSetChanged()
-                        }
-
                         builder.setNegativeButton("취소", null)
-
                         builder.show()
+
+                        textInputLayoutCategoryName.requestFocus()
+
+                    }
+
+                    thread {
+                        SystemClock.sleep(300)
+                        val imm = mainActivity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                        imm.showSoftInput(dialogCategoryBinding.textInputEditText, InputMethodManager.SHOW_IMPLICIT)
                     }
 
                     false
@@ -130,26 +133,12 @@ class CategoryFragment : Fragment() {
                         menu[0].setOnMenuItemClickListener {
 
                             val dialogCategoryBinding = DialogCategoryBinding.inflate(layoutInflater)
-                            val builder = AlertDialog.Builder(mainActivity)
+                            val builder = MaterialAlertDialogBuilder(mainActivity)
                             builder.setTitle("카테고리 수정")
 
                             builder.setView(dialogCategoryBinding.root)
 
                             dialogCategoryBinding.run {
-
-                                textInputLayoutCategoryName.run {
-                                    editText?.run {
-                                        requestFocus()
-
-                                        addTextChangedListener {
-                                            if (it!!.isEmpty()) {
-                                                error = "카테고리 이름을 입력해주세요"
-                                            } else {
-                                                textInputLayoutCategoryName.error = null
-                                            }
-                                        }
-                                    }
-                                }
 
                                 thread {
                                     SystemClock.sleep(300)
@@ -158,18 +147,25 @@ class CategoryFragment : Fragment() {
                                 }
 
                                 val category = DAO.selectCategory(mainActivity, DataClass.categoryIdx)
-                                textInputLayoutCategoryName.editText!!.setText(category.categoryName)
+
+                                textInputLayoutCategoryName.run {
+                                    editText!!.setText(category.categoryName)
+                                    requestFocus()
+                                }
 
                                 builder.setPositiveButton("확인") { dialogInterface: DialogInterface, i: Int ->
                                     category.categoryName = textInputLayoutCategoryName.editText!!.text.toString()
-                                    DAO.updateCategory(mainActivity, category)
+                                    if (category.categoryName.isEmpty()) {
+                                        textInputLayoutCategoryName.error = "카테고리 이름 없음"
+                                    } else {
+                                        DAO.updateCategory(mainActivity, category)
 
-                                    DataClass.categoryList = DAO.selectAllCategory(mainActivity)
-                                    fragmentCategoryBinding.recyclerViewCategory.adapter?.notifyDataSetChanged()
+                                        DataClass.categoryList = DAO.selectAllCategory(mainActivity)
+                                        fragmentCategoryBinding.recyclerViewCategory.adapter?.notifyDataSetChanged()
+                                    }
                                 }
 
                                 builder.setNegativeButton("취소", null)
-
                                 builder.show()
                             }
                             false
@@ -180,7 +176,7 @@ class CategoryFragment : Fragment() {
 
                             val filteredMemo = DataClass.memoList.filter { it.categoryIdx == DataClass.categoryIdx }
 
-                            Log.d("filterMemo", filteredMemo.toString())
+                            //Log.d("filterMemo", filteredMemo.toString())
 
                             for (memoClass in filteredMemo) {
                                 DAO.deleteMemo(mainActivity, memoClass.idx)
@@ -196,7 +192,7 @@ class CategoryFragment : Fragment() {
 
                     root.setOnClickListener {
                         DataClass.categoryIdx = DataClass.categoryList[adapterPosition].idx
-                        mainActivity.replaceFragment(DataClass.MEMO_LIST_FRAGMENT, true, false)
+                        mainActivity.replaceFragment(DataClass.MEMO_LIST_FRAGMENT, true, true)
                     }
                 }
             }
@@ -226,3 +222,5 @@ class CategoryFragment : Fragment() {
     }
 
 }
+
+

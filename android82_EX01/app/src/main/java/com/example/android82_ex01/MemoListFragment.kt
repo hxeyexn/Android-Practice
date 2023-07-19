@@ -39,8 +39,10 @@ class MemoListFragment : Fragment() {
 
             toolbarMemoList.run {
                 val category = DAO.selectCategory(mainActivity, DataClass.categoryIdx)
+                // toolbar -> materialToolbar
                 title = category.categoryName
-                setTitleTextColor(Color.WHITE)
+                isTitleCentered = true
+                setTitleTextColor(Color.BLACK)
                 inflateMenu(R.menu.memo_menu)
 
                 setOnMenuItemClickListener {
@@ -48,12 +50,12 @@ class MemoListFragment : Fragment() {
                     false
                 }
 
-                setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
+                setNavigationIcon(R.drawable.arrow_back_ios_new_24px)
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    navigationIcon?.colorFilter = BlendModeColorFilter(Color.WHITE, BlendMode.SRC_ATOP)
+                    navigationIcon?.colorFilter = BlendModeColorFilter(Color.BLACK, BlendMode.SRC_ATOP)
                 } else {
-                    navigationIcon?.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP)
+                    navigationIcon?.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP)
                 }
 
                 setNavigationOnClickListener {
@@ -82,7 +84,7 @@ class MemoListFragment : Fragment() {
                 rowMemoBinding.root.setOnClickListener {
                     DataClass.memoIdx = DataClass.filteredMemoList[adapterPosition].idx
                     Log.d("memoIdx", DataClass.memoIdx.toString())
-                    mainActivity.replaceFragment(DataClass.SHOW_MEMO_FRAGMENT, true, false)
+                    mainActivity.replaceFragment(DataClass.SHOW_MEMO_FRAGMENT, true, true)
                 }
             }
         }

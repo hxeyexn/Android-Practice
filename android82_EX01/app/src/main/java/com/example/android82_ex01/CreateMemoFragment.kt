@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import com.example.android82_ex01.databinding.FragmentCreateMemoBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -44,7 +45,8 @@ class CreateMemoFragment : Fragment() {
 
             toolbarCreateMemo.run {
                 title = "메모 추가"
-                setTitleTextColor(Color.WHITE)
+                isTitleCentered = true
+                setTitleTextColor(Color.BLACK)
                 inflateMenu(R.menu.create_memo_menu)
 
                 setOnMenuItemClickListener {
@@ -56,7 +58,7 @@ class CreateMemoFragment : Fragment() {
                     val content = editTextCreateMemoContent.text.toString()
                     val categoryIdx = DataClass.categoryIdx
 
-                    val builder = AlertDialog.Builder(mainActivity)
+                    val builder = MaterialAlertDialogBuilder(mainActivity)
 
                     if (title.isEmpty()) {
                         builder.run {
@@ -81,13 +83,13 @@ class CreateMemoFragment : Fragment() {
                     false
                 }
 
-                setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
+                setNavigationIcon(R.drawable.arrow_back_ios_new_24px)
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     navigationIcon?.colorFilter =
-                        BlendModeColorFilter(Color.WHITE, BlendMode.SRC_ATOP)
+                        BlendModeColorFilter(Color.BLACK, BlendMode.SRC_ATOP)
                 } else {
-                    navigationIcon?.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP)
+                    navigationIcon?.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP)
                 }
 
                 setNavigationOnClickListener {

@@ -27,32 +27,31 @@ class LoginFragment : Fragment() {
 
         fragmentLoginBinding.run {
 
-            editTextLoginPw.requestFocus()
+            loginPw.requestFocus()
 
             thread {
-                SystemClock.sleep(300)
+                SystemClock.sleep(500)
                 val imm = mainActivity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.showSoftInput(editTextLoginPw, 0)
+                imm.showSoftInput(loginPw.editText, 0)
             }
 
             toolbarLogin.run {
                 title = "로그인"
-                setTitleTextColor(Color.WHITE)
+                isTitleCentered = true
+                setTitleTextColor(Color.BLACK)
             }
 
             buttonLogin.setOnClickListener {
                 val pwClass = DAO.selectPassword(mainActivity, 1)
-                val builder = AlertDialog.Builder(mainActivity)
 
-                if (editTextLoginPw.text.toString() != pwClass.password.toString()) {
-                    builder.run {
-                        setTitle("비밀번호 오류")
-                        setMessage("비밀번호가 틀렸습니다")
-                        setPositiveButton("확인", null)
-                        show()
+                loginPw.run {
+                    if (loginPw.editText?.text.toString() != pwClass.password.toString()) {
+                        error = "잘못된 비밀번호입니다"
+                        setErrorIconDrawable(R.drawable.error_24px)
+                    } else {
+                        error = null
+                        mainActivity.replaceFragment(DataClass.CATEGORY_FRAGMENT, false, true)
                     }
-                } else {
-                    mainActivity.replaceFragment(DataClass.CATEGORY_FRAGMENT, true, false)
                 }
             }
 
