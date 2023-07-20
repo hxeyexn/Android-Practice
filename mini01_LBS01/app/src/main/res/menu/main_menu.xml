@@ -3,8 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/mainMenuItem"
+        android:id="@+id/mainMenuItem1"
         android:icon="@drawable/my_location_24px"
+        android:title="Item"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/mainMenuItem2"
+        android:icon="@drawable/flag_24px"
         android:title="Item"
         app:showAsAction="always" />
 </menu>
