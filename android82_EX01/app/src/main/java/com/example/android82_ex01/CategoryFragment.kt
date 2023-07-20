@@ -68,9 +68,9 @@ class CategoryFragment : Fragment() {
                                         val idx = 0
 
                                         val categoryClass = CategoryClass(idx, categoryName)
-                                        DAO.insertCategory(mainActivity, categoryClass)
+                                        CategoryDAO.insertCategory(mainActivity, categoryClass)
 
-                                        DataClass.categoryList = DAO.selectAllCategory(mainActivity)
+                                        DataClass.categoryList = CategoryDAO.selectAllCategory(mainActivity)
                                         fragmentCategoryBinding.recyclerViewCategory.adapter?.notifyDataSetChanged()
                                     }
                                 }
@@ -104,7 +104,7 @@ class CategoryFragment : Fragment() {
                     )
                 )
 
-                DataClass.categoryList = DAO.selectAllCategory(mainActivity)
+                DataClass.categoryList = CategoryDAO.selectAllCategory(mainActivity)
                 fragmentCategoryBinding.recyclerViewCategory.adapter?.notifyDataSetChanged()
             }
 
@@ -146,7 +146,7 @@ class CategoryFragment : Fragment() {
                                     imm.showSoftInput(textInputLayoutCategoryName.editText!!, 0)
                                 }
 
-                                val category = DAO.selectCategory(mainActivity, DataClass.categoryIdx)
+                                val category = CategoryDAO.selectCategory(mainActivity, DataClass.categoryIdx)
 
                                 textInputLayoutCategoryName.run {
                                     editText!!.setText(category.categoryName)
@@ -158,9 +158,9 @@ class CategoryFragment : Fragment() {
                                     if (category.categoryName.isEmpty()) {
                                         textInputLayoutCategoryName.error = "카테고리 이름 없음"
                                     } else {
-                                        DAO.updateCategory(mainActivity, category)
+                                        CategoryDAO.updateCategory(mainActivity, category)
 
-                                        DataClass.categoryList = DAO.selectAllCategory(mainActivity)
+                                        DataClass.categoryList = CategoryDAO.selectAllCategory(mainActivity)
                                         fragmentCategoryBinding.recyclerViewCategory.adapter?.notifyDataSetChanged()
                                     }
                                 }
@@ -179,12 +179,12 @@ class CategoryFragment : Fragment() {
                             //Log.d("filterMemo", filteredMemo.toString())
 
                             for (memoClass in filteredMemo) {
-                                DAO.deleteMemo(mainActivity, memoClass.idx)
+                                MemoDAO.deleteMemo(mainActivity, memoClass.idx)
                             }
 
-                            DAO.deleteCategory(mainActivity, DataClass.categoryIdx)
+                            CategoryDAO.deleteCategory(mainActivity, DataClass.categoryIdx)
 
-                            DataClass.categoryList = DAO.selectAllCategory(mainActivity)
+                            DataClass.categoryList = CategoryDAO.selectAllCategory(mainActivity)
                             fragmentCategoryBinding.recyclerViewCategory.adapter?.notifyDataSetChanged()
                             false
                         }

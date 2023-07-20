@@ -19,14 +19,16 @@ class MainActivity : AppCompatActivity() {
         activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(activityMainBinding.root)
 
-        val databaseName = "Password.db"
-        val exists = isDatabaseExists(this, databaseName)
-        if (exists) {
-            // 회원가입된 상태 : Password.db가 이미 존재하는 경우에 대한 처리
-            replaceFragment(DataClass.LOGIN_FRAGMENT, false, false)
-        } else {
-            //  회원가입되지 않은 상태 : Password.db가 존재하지 않는 경우에 대한 처리
+        val pref = getSharedPreferences("password", MODE_PRIVATE)
+        val passwordData = pref.getString("passwordData", null)
+
+        // 설정된 비밀번호가 없다면
+        if (passwordData == null) {
             replaceFragment(DataClass.SIGNUP_FRAGMENT, false, false)
+        }
+        // 설정된 비밀번호가 있다면
+        else {
+            replaceFragment(DataClass.LOGIN_FRAGMENT, false, false)
         }
     }
 
@@ -35,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         // Fragment 교체 상태로 설정한다.
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         // 새로운 Fragment를 담을 변수
-        var newFragment = when(name) {
+        val newFragment = when(name) {
 
             DataClass.SIGNUP_FRAGMENT -> {
                 SignupFragment()
@@ -87,9 +89,4 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.popBackStack(name, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }
 
-    // DB 파일이 있는지 확인
-    fun isDatabaseExists(context: Context, databaseName: String): Boolean {
-        val databaseFile = context.getDatabasePath(databaseName)
-        return databaseFile.exists()
-    }
 }

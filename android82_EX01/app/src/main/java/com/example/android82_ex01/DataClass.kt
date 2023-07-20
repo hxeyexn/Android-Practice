@@ -21,6 +21,5 @@ class DataClass {
     }
 }
 
-data class PasswordClass(var idx: Int, var password: Int)
 data class CategoryClass(var idx: Int, var categoryName: String)
 data class MemoClass(var idx: Int, var title: String, var date: String, var content: String, var categoryIdx: Int)

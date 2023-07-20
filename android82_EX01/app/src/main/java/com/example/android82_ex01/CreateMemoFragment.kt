@@ -76,7 +76,7 @@ class CreateMemoFragment : Fragment() {
                         }
                     } else {
                         val memoClass = MemoClass(idx, title, date, content, categoryIdx)
-                        DAO.insertMemo(mainActivity, memoClass)
+                        MemoDAO.insertMemo(mainActivity, memoClass)
 
                         mainActivity.removeFragment(DataClass.CREATE_MEMO_FRAGMENT)
                     }

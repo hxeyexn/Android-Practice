@@ -28,7 +28,7 @@ class ShowMemoFragment : Fragment() {
 
         fragmentShowMemoBinding.run {
 
-            val memo = DAO.selectMemo(mainActivity, DataClass.memoIdx)
+            val memo = MemoDAO.selectMemo(mainActivity, DataClass.memoIdx)
 
             textViewShowMemoTitle.text = memo.title
             textViewShowMemoDate.text = memo.date
@@ -52,7 +52,7 @@ class ShowMemoFragment : Fragment() {
                                 setMessage("메모를 삭제 하겠습니까?")
 
                                 setPositiveButton("확인") { dialogInterface: DialogInterface, i: Int ->
-                                    DAO.deleteMemo(mainActivity, DataClass.memoIdx)
+                                    MemoDAO.deleteMemo(mainActivity, DataClass.memoIdx)
                                     mainActivity.removeFragment(DataClass.SHOW_MEMO_FRAGMENT)
                                 }
                                 setNegativeButton("취소", null)

@@ -34,11 +34,11 @@ class MemoListFragment : Fragment() {
 
         fragmentMemoListBinding.run {
 
-            DataClass.memoList = DAO.selectAllMemo(mainActivity)
+            DataClass.memoList = MemoDAO.selectAllMemo(mainActivity)
             DataClass.filteredMemoList = DataClass.memoList.filter { it.categoryIdx == DataClass.categoryIdx } as MutableList<MemoClass>
 
             toolbarMemoList.run {
-                val category = DAO.selectCategory(mainActivity, DataClass.categoryIdx)
+                val category = CategoryDAO.selectCategory(mainActivity, DataClass.categoryIdx)
                 // toolbar -> materialToolbar
                 title = category.categoryName
                 isTitleCentered = true

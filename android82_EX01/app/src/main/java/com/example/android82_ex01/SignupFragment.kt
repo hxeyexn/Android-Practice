@@ -1,5 +1,6 @@
 package com.example.android82_ex01
 
+import android.content.Context
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.graphics.Color
 import android.os.Bundle
@@ -61,10 +62,11 @@ class SignupFragment : Fragment() {
                     signupPw.error = null
                     signupCheckPw.error = null
 
-                    val idx = 0
-                    val passwordClass = PasswordClass(idx, pw.toInt())
+                    val pref = mainActivity.getSharedPreferences("password", Context.MODE_PRIVATE)
+                    val editor = pref.edit()
+                    editor.putString("passwordData", pw)
 
-                    DAO.insertPassword(mainActivity, passwordClass)
+                    editor.commit()
 
                     mainActivity.replaceFragment(DataClass.LOGIN_FRAGMENT, false, true)
                 }

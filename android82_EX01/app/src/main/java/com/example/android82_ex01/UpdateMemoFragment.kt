@@ -32,7 +32,7 @@ class UpdateMemoFragment : Fragment() {
 
         fragmentUpdateMemoBinding.run {
 
-            val memo = DAO.selectMemo(mainActivity, DataClass.memoIdx)
+            val memo = MemoDAO.selectMemo(mainActivity, DataClass.memoIdx)
             editTextUpdateMemoTitle.setText(memo.title)
             editTextUpdateMemoContent.setText(memo.content)
 
@@ -61,7 +61,7 @@ class UpdateMemoFragment : Fragment() {
                     } else {
                         memo.title = editTextUpdateMemoTitle.text.toString()
                         memo.content = editTextUpdateMemoContent.text.toString()
-                        DAO.updateMemo(mainActivity, memo)
+                        MemoDAO.updateMemo(mainActivity, memo)
 
                         mainActivity.removeFragment(DataClass.UPDATE_MEMO_FRAGMENT)
                     }

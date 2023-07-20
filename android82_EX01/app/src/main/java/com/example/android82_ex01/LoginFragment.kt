@@ -42,10 +42,11 @@ class LoginFragment : Fragment() {
             }
 
             buttonLogin.setOnClickListener {
-                val pwClass = DAO.selectPassword(mainActivity, 1)
+                val pref = mainActivity.getSharedPreferences("password", Context.MODE_PRIVATE)
+                val passwordData = pref.getString("passwordData", null)
 
                 loginPw.run {
-                    if (loginPw.editText?.text.toString() != pwClass.password.toString()) {
+                    if (loginPw.editText?.text.toString() != passwordData) {
                         error = "잘못된 비밀번호입니다"
                         setErrorIconDrawable(R.drawable.error_24px)
                     } else {
