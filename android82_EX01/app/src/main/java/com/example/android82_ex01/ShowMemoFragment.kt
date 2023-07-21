@@ -13,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.android82_ex01.databinding.FragmentShowMemoBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class ShowMemoFragment : Fragment() {
 
@@ -46,7 +47,7 @@ class ShowMemoFragment : Fragment() {
                             mainActivity.replaceFragment(DataClass.UPDATE_MEMO_FRAGMENT, true, true)
                         }
                         R.id.showMemoMenuDelete -> {
-                            val builder = AlertDialog.Builder(mainActivity)
+                            val builder = MaterialAlertDialogBuilder(mainActivity)
                             builder.run {
                                 setTitle("메모 삭제")
                                 setMessage("메모를 삭제 하겠습니까?")

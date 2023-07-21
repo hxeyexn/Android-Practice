@@ -67,6 +67,7 @@ class CreateMemoFragment : Fragment() {
                             setPositiveButton("확인", null)
                             show()
                         }
+                        editTextCreateMemoTitle.requestFocus()
                     } else if (content.isEmpty()) {
                         builder.run {
                             setTitle("내용 오류")
@@ -74,6 +75,7 @@ class CreateMemoFragment : Fragment() {
                             setPositiveButton("확인", null)
                             show()
                         }
+                        editTextCreateMemoContent.requestFocus()
                     } else {
                         val memoClass = MemoClass(idx, title, date, content, categoryIdx)
                         MemoDAO.insertMemo(mainActivity, memoClass)

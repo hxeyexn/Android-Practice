@@ -83,7 +83,7 @@ class MemoListFragment : Fragment() {
 
                 rowMemoBinding.root.setOnClickListener {
                     DataClass.memoIdx = DataClass.filteredMemoList[adapterPosition].idx
-                    Log.d("memoIdx", DataClass.memoIdx.toString())
+                    // Log.d("memoIdx", DataClass.memoIdx.toString())
                     mainActivity.replaceFragment(DataClass.SHOW_MEMO_FRAGMENT, true, true)
                 }
             }

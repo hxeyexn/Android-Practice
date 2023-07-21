@@ -50,6 +50,7 @@ class UpdateMemoFragment : Fragment() {
                             setMessage("제목을 입력하세요")
                             setPositiveButton("확인", null)
                             show()
+                            editTextUpdateMemoTitle.requestFocus()
                         }
                     } else if (editTextUpdateMemoContent.text.isEmpty()) {
                         builder.run {
@@ -57,6 +58,7 @@ class UpdateMemoFragment : Fragment() {
                             setMessage("내용을 입력하세요")
                             setPositiveButton("확인", null)
                             show()
+                            editTextUpdateMemoContent.requestFocus()
                         }
                     } else {
                         memo.title = editTextUpdateMemoTitle.text.toString()
