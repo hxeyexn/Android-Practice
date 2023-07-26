@@ -3,6 +3,10 @@ plugins {
     id 'org.jetbrains.kotlin.android'
 }
 
+// 프로퍼티를 선언하고, 저장한 키값을 불러온다.
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
 android {
     namespace 'com.example.mini03_newssearchproject'
     compileSdk 33
@@ -14,9 +18,16 @@ android {
         versionCode 1
         versionName "1.0"
 
+        // 프로젝트 내에서 언제든지 사용이 가능한 변수들이다.
+        // 타입 - 키 - 값으로 저장된다.
+        buildConfigField "String", "NAVER_CLIENT_ID", properties['naver_client_id']
+        buildConfigField "String", "NAVER_CLIENT_SECRET", properties['naver_client_secret']
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
+    buildFeatures {
+        buildConfig = true
+    }
     buildTypes {
         release {
             minifyEnabled false
