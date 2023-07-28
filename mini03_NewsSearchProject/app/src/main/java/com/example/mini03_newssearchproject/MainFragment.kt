@@ -46,6 +46,8 @@ class MainFragment : Fragment() {
         mainActivity = activity as MainActivity
 
         fragmentMainBinding.run {
+            toolbarMain.title = "뉴스 검색"
+
             searchView.editText.setOnEditorActionListener { v, actionId, event ->
                 if (searchView.editText.text.isEmpty()) {
                     Log.e("검색어 오류", "검색어를 입력하세요")
@@ -95,7 +97,7 @@ class MainFragment : Fragment() {
             }
 
             val apiURL =
-                "https://openapi.naver.com/v1/search/news.json?query=$searchWord&display=30&sort=sim"
+                "https://openapi.naver.com/v1/search/news.json?query=$searchWord&display=50&sort=sim"
             val url = URL(apiURL)
             val httpURLConnection = url.openConnection() as HttpURLConnection
             httpURLConnection.requestMethod = "GET"
