@@ -26,15 +26,16 @@ class ContentFragment : Fragment() {
 
         fragmentContentBinding.run {
             toolbarContent.run {
-                setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
+                title = "기사 본문"
+                setNavigationIcon(R.drawable.arrow_back_ios_24px)
                 setNavigationOnClickListener {
                     mainActivity.removeFragment(MainActivity.CONTENT_FRAGMENT)
                 }
             }
 
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                webViewContent.settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
-//            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                webViewContent.settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
+            }
 
             val webSettings = webViewContent.settings
             webSettings.javaScriptEnabled = true // JavaScript 허용

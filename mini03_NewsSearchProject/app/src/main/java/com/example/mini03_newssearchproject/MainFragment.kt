@@ -1,20 +1,19 @@
 package com.example.mini03_newssearchproject
 
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.WebSettings
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mini03_newssearchproject.databinding.FragmentMainBinding
 import com.example.mini03_newssearchproject.databinding.RowMainBinding
+import com.example.mini03_newssearchproject.databinding.RowSearchHistoryBinding
 import com.google.android.material.divider.MaterialDividerItemDecoration
-import com.google.android.material.search.SearchView
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -36,6 +35,7 @@ class MainFragment : Fragment() {
 
     val titleList = mutableListOf<String>()
     val descriptionList = mutableListOf<String>()
+    val searchHistoryList = mutableListOf<String>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,28 +47,38 @@ class MainFragment : Fragment() {
 
         fragmentMainBinding.run {
             searchView.editText.setOnEditorActionListener { v, actionId, event ->
-                searchBar.text = searchView.text
-                word = searchBar.text.toString()
-                searchView.hide()
-
-                // Log.d("word", word)
-
-                if (word != null) {
-                    getNewsData()
-                } else {
+                if (searchView.editText.text.isEmpty()) {
                     Log.e("검색어 오류", "검색어를 입력하세요")
+                } else {
+                    searchBar.text = searchView.text
+                    word = searchBar.text.toString()
+                    searchView.hide()
+                    // Log.d("word", word)
+
+                    searchHistoryList.add(word)
+                    // Log.d("searchList", searchHistoryList.toString())
+
+                    getNewsData()
                 }
 
                 true
             }
 
-            recyclerViewMain.run {
-                adapter = RecyclerViewAdapter()
+            recyclerViewResult.run {
+                adapter = NewsRecyclerViewAdapter()
                 layoutManager = LinearLayoutManager(mainActivity)
-                val divider = MaterialDividerItemDecoration(mainActivity, MaterialDividerItemDecoration.VERTICAL)
-                addItemDecoration(divider)
+                addItemDecoration(MaterialDividerItemDecoration(mainActivity, MaterialDividerItemDecoration.VERTICAL))
             }
 
+            recyclerViewSearchHistory.run {
+                adapter = SearchHistoryRecyclerViewAdapter()
+                layoutManager = LinearLayoutManager(mainActivity).apply {
+                    // 리사이클러뷰 아이템의 순서를 역순으로 배치
+                    reverseLayout = true
+                    stackFromEnd = true
+                }
+                addItemDecoration(MaterialDividerItemDecoration(mainActivity, MaterialDividerItemDecoration.VERTICAL))
+            }
         }
 
         return fragmentMainBinding.root
@@ -144,7 +154,7 @@ class MainFragment : Fragment() {
                     Log.d("link", link)
 
                     mainActivity.runOnUiThread {
-                        fragmentMainBinding.recyclerViewMain.adapter?.notifyDataSetChanged()
+                        fragmentMainBinding.recyclerViewResult.adapter?.notifyDataSetChanged()
                     }
 
                 }
@@ -167,8 +177,8 @@ class MainFragment : Fragment() {
         }
     }
 
-    inner class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
-        inner class ViewHolder(rowMainBinding: RowMainBinding) : RecyclerView.ViewHolder(rowMainBinding.root) {
+    inner class NewsRecyclerViewAdapter : RecyclerView.Adapter<NewsRecyclerViewAdapter.NewsViewHolder>() {
+        inner class NewsViewHolder(rowMainBinding: RowMainBinding) : RecyclerView.ViewHolder(rowMainBinding.root) {
             var textViewRowMainTitle: TextView
             var textViewRowMainDescription: TextView
 
@@ -183,25 +193,71 @@ class MainFragment : Fragment() {
             }
         }
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsViewHolder {
             val rowMainBinding = RowMainBinding.inflate(layoutInflater)
-            val viewHolder = ViewHolder(rowMainBinding)
+            val newsViewHolder = NewsViewHolder(rowMainBinding)
 
             rowMainBinding.root.layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
 
-            return viewHolder
+            return newsViewHolder
         }
 
         override fun getItemCount(): Int {
             return titleList.size
         }
 
-        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
             holder.textViewRowMainTitle.text = titleList[position]
             holder.textViewRowMainDescription.text = descriptionList[position]
+        }
+    }
+
+    inner class SearchHistoryRecyclerViewAdapter : RecyclerView.Adapter<SearchHistoryRecyclerViewAdapter.SearchHistoryViewHolder>() {
+        inner class SearchHistoryViewHolder(rowSearchHistoryBinding: RowSearchHistoryBinding) : RecyclerView.ViewHolder(rowSearchHistoryBinding.root) {
+            val textViewSearchHistory: TextView
+
+            init {
+                textViewSearchHistory = rowSearchHistoryBinding.textViewSearchHistory
+
+                rowSearchHistoryBinding.run {
+                    // 이전 검색 기록 클릭 시
+                    root.setOnClickListener {
+                        fragmentMainBinding.searchBar.text = searchHistoryList[adapterPosition]
+                        word = fragmentMainBinding.searchBar.text.toString()
+                        fragmentMainBinding.searchView.hide()
+                        getNewsData()
+                    }
+
+                    // 검색 기록 삭제
+                    imageViewSearchHistoryDelete.setOnClickListener {
+                        searchHistoryList.removeAt(adapterPosition)
+                        notifyDataSetChanged()
+                    }
+                }
+            }
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchHistoryViewHolder {
+            val rowSearchHistoryBinding = RowSearchHistoryBinding.inflate(layoutInflater)
+            val searchHistoryViewHolder = SearchHistoryViewHolder(rowSearchHistoryBinding)
+
+            rowSearchHistoryBinding.root.layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+
+            return searchHistoryViewHolder
+        }
+
+        override fun getItemCount(): Int {
+            return searchHistoryList.size
+        }
+
+        override fun onBindViewHolder(holder: SearchHistoryViewHolder, position: Int) {
+            holder.textViewSearchHistory.text = searchHistoryList[position]
         }
     }
 }

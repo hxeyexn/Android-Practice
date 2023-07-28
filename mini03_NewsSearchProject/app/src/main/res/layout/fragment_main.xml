@@ -13,7 +13,7 @@
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewMain"
+            android:id="@+id/recyclerViewResult"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </androidx.core.widget.NestedScrollView>
@@ -37,6 +37,10 @@
         android:hint="검색어를 입력하세요"
         app:layout_anchor="@id/searchBar">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewSearchHistory"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </com.google.android.material.search.SearchView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
