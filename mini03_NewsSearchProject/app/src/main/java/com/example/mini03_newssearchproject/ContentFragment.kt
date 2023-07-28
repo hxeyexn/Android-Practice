@@ -1,5 +1,6 @@
 package com.example.mini03_newssearchproject
 
+import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,7 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
+import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.ProgressBar
 import com.example.mini03_newssearchproject.databinding.FragmentContentBinding
 
 class ContentFragment : Fragment() {
@@ -45,7 +48,7 @@ class ContentFragment : Fragment() {
             webSettings.allowFileAccess = true // 파일 접근 허용
 
             // 안드로이드 웹뷰가 따로 크롬으로 열리지 않고 기기에 설치된 웹뷰 엔진을 사용하여 웹 페이지를 표시
-            webViewContent.webViewClient = WebViewClient() // 크롬 Custom Tabs 사용하지 않도록 설정
+            webViewContent.webViewClient = MyWebViewClient() // 크롬 Custom Tabs 사용하지 않도록 설정
             webViewContent.webChromeClient = WebChromeClient() // 크롬 WebView 사용하지 않도록 설정
 
             webViewContent.loadUrl(MainActivity.linkList[MainActivity.position])
@@ -53,6 +56,18 @@ class ContentFragment : Fragment() {
         }
 
         return fragmentContentBinding.root
+    }
+
+    inner class MyWebViewClient : WebViewClient() {
+        override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+            super.onPageStarted(view, url, favicon)
+            fragmentContentBinding.progressBar.visibility = ProgressBar.VISIBLE
+        }
+
+        override fun onPageFinished(view: WebView?, url: String?) {
+            super.onPageFinished(view, url)
+            fragmentContentBinding.progressBar.visibility = ProgressBar.GONE
+        }
     }
 
 }
