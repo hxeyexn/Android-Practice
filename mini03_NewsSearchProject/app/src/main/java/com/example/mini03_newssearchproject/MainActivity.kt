@@ -14,6 +14,8 @@ class MainActivity : AppCompatActivity() {
     companion object {
         val MAIN_FRAGMENT = "MainFragment"
         val CONTENT_FRAGMENT = "ContentFragment"
+        val linkList = mutableListOf<String>()
+        var position = 0
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

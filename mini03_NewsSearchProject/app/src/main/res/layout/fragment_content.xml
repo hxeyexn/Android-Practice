@@ -6,6 +6,7 @@
     android:orientation="vertical"
     tools:context=".ContentFragment" >
 
+
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbarContent"
         android:layout_width="match_parent"
@@ -13,4 +14,9 @@
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/Theme.Mini03.Toolbar" />
+
+    <WebView
+        android:id="@+id/webViewContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </LinearLayout>

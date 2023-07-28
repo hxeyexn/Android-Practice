@@ -1,17 +1,20 @@
 package com.example.mini03_newssearchproject
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebSettings
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mini03_newssearchproject.databinding.FragmentMainBinding
 import com.example.mini03_newssearchproject.databinding.RowMainBinding
 import com.google.android.material.divider.MaterialDividerItemDecoration
+import com.google.android.material.search.SearchView
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -33,7 +36,6 @@ class MainFragment : Fragment() {
 
     val titleList = mutableListOf<String>()
     val descriptionList = mutableListOf<String>()
-    val linkList = mutableListOf<String>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,6 +68,7 @@ class MainFragment : Fragment() {
                 val divider = MaterialDividerItemDecoration(mainActivity, MaterialDividerItemDecoration.VERTICAL)
                 addItemDecoration(divider)
             }
+
         }
 
         return fragmentMainBinding.root
@@ -82,7 +85,7 @@ class MainFragment : Fragment() {
             }
 
             val apiURL =
-                "https://openapi.naver.com/v1/search/news.json?query=$searchWord&display=10&sort=sim"
+                "https://openapi.naver.com/v1/search/news.json?query=$searchWord&display=30&sort=sim"
             val url = URL(apiURL)
             val httpURLConnection = url.openConnection() as HttpURLConnection
             httpURLConnection.requestMethod = "GET"
@@ -114,7 +117,7 @@ class MainFragment : Fragment() {
 
                 titleList.clear()
                 descriptionList.clear()
-                linkList.clear()
+                MainActivity.linkList.clear()
 
                 val itemArray = root.getJSONArray("items")
 
@@ -135,7 +138,7 @@ class MainFragment : Fragment() {
 
                     titleList.add(newTitle)
                     descriptionList.add(newDescription)
-                    linkList.add(link)
+                    MainActivity.linkList.add(link)
 
                     Log.d("news", newTitle)
                     Log.d("link", link)
@@ -174,6 +177,7 @@ class MainFragment : Fragment() {
                 textViewRowMainDescription = rowMainBinding.textViewRowMainDescription
 
                 rowMainBinding.root.setOnClickListener {
+                    MainActivity.position = adapterPosition
                     mainActivity.replaceFragment(MainActivity.CONTENT_FRAGMENT, true, true, null)
                 }
             }
